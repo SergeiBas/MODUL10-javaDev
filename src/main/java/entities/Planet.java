@@ -14,7 +14,7 @@ public class Planet {
     @Column(name = "planet_id")
     private String id;
 
-    @Column(nullable = false, length = 500)
+    @Column
     private String name;
 
     public Planet(String id, String name) {
@@ -27,9 +27,6 @@ public class Planet {
 
     @Override
     public String toString() {
-        return "Planet{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                '}';
+        return "Planet{name= " + name + "}";
     }
 }

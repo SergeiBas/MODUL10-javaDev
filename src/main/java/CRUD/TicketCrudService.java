@@ -1,6 +1,8 @@
 package CRUD;
 
 import entities.Client;
+import entities.Planet;
+import entities.Ticket;
 import other.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionException;
@@ -8,37 +10,40 @@ import org.hibernate.Transaction;
 
 import java.util.List;
 
+public class TicketCrudService {
 
-public class ClientCrudService {
-
-    public void createClient(Client client) {
+    public void createTicket(Ticket ticket) {
         try (Session session = Hibernate.getInstance().getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.merge(client);
+            session.merge(ticket);
             transaction.commit();
         } catch (SessionException e) {
             throw new RuntimeException();
         }
     }
 
-    public Client readClient(Long clientId) {
-        Client client;
+    public Ticket readTicket(Long ticketId) {
+        Ticket ticket;
         try (Session session = Hibernate.getInstance().getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            client = session.get(Client.class, clientId);
+            ticket = session.get(Ticket.class, ticketId);
             transaction.commit();
         } catch (SessionException e) {
             throw new RuntimeException();
         }
-        return client;
+        return ticket;
     }
 
-    public void updateClient(int clientId, String name) {
+    public void updateTicker(Long ticketId, Client client, Planet fromPlanetId, Planet toPlanetId) {
         try (Session session = Hibernate.getInstance().getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.createQuery("UPDATE Client SET name =: name WHERE id =: client_id")
-                    .setParameter("name", name)
-                    .setParameter("client_id", clientId)
+            session.createQuery("UPDATE Ticket SET client =: client, " +
+                            "fromPlanetId =: fromPlanetId," +
+                            "toPlanetId =: toPlanetId WHERE id =: planet_id")
+                    .setParameter("client", client)
+                    .setParameter("fromPlanetId", fromPlanetId)
+                    .setParameter("toPlanetId", toPlanetId)
+                    .setParameter("planet_id", ticketId)
                     .executeUpdate();
             transaction.commit();
         } catch (SessionException e) {
@@ -46,11 +51,11 @@ public class ClientCrudService {
         }
     }
 
-    public void deleteClient(int clientId) {
+    public void deleteTicket(Long ticketId) {
         try (Session session = Hibernate.getInstance().getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.createQuery("DELETE FROM Client WHERE id= :client_id")
-                    .setParameter("client_id", clientId)
+            session.createQuery("DELETE FROM Ticket WHERE id= :ticket_id")
+                    .setParameter("ticket_id", ticketId)
                     .executeUpdate();
             transaction.commit();
         } catch (SessionException e) {
@@ -58,15 +63,15 @@ public class ClientCrudService {
         }
     }
 
-    public List<Client> getAllClients() {
-        List<Client> clients;
+    public List<Ticket> getAllTickets() {
+        List<Ticket> tickets;
         try (Session session = Hibernate.getInstance().getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            clients = session.createQuery("FROM Client", Client.class).list();
+            tickets = session.createQuery("from Ticket", Ticket.class).list();
             transaction.commit();
         } catch (SessionException e) {
             throw new RuntimeException();
         }
-        return clients;
+        return tickets;
     }
 }

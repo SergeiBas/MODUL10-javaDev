@@ -13,7 +13,7 @@ public class PlanetCrudService {
     public void createPlanet(Planet planet) {
         try (Session session = Hibernate.getInstance().getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.persist(planet);
+            session.merge(planet);
             transaction.commit();
         } catch (SessionException e) {
             throw new RuntimeException();
@@ -61,7 +61,7 @@ public class PlanetCrudService {
         List<Planet> planets;
         try (Session session = Hibernate.getInstance().getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            planets = session.createQuery("SELECT planet FROM Planet planet", Planet.class).list();
+            planets = session.createQuery("FROM Planet", Planet.class).list();
             transaction.commit();
         } catch (SessionException e) {
             throw new RuntimeException();

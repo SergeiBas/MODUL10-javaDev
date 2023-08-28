@@ -1,5 +1,6 @@
 import CRUD.ClientCrudService;
 import CRUD.PlanetCrudService;
+import CRUD.TicketCrudService;
 import entities.Client;
 import entities.Planet;
 import other.Hibernate;
@@ -10,7 +11,9 @@ public class Main {
 
         Migration.checkMigration();
 
-        PlanetCrudService planetService = new PlanetCrudService();
+        new ClientCrudService();
+        new PlanetCrudService();
+        new TicketCrudService();
 
         Hibernate.getInstance().close();
 
